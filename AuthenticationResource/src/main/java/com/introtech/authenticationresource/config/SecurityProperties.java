@@ -6,5 +6,6 @@ import java.util.Set;
 
 @ConfigurationProperties("introtech.security")
 public record SecurityProperties(String jwkSetUri,
-                                 Set<String> unSecurePaths) {
+                                 Set<String> unSecurePaths,
+                                 String clientName) {
 }

@@ -94,9 +94,10 @@ public class JwtService {
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(jwtProperties.issuer())
+                .audience(List.of(userDetails.getClientName()))
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plus(jwtProperties.accessTokenDuration()))
-                .subject(userDetails.getId().toString())
+                .subject(userDetails.getUsername())
                 .claim(JWT_TYPE_CLAIM, ACCESS_TOKEN_TYPE)
                 .claim(ROLE_CLAIM, roles)
                 .build();
@@ -119,6 +120,7 @@ public class JwtService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .id(refreshToken.getJti().toString())
                 .subject(refreshToken.getUserId().toString())
+                .audience(List.of(userDetails.getClientName()))
                 .issuer(jwtProperties.issuer())
                 .issuedAt(refreshToken.getCreatedAt())
                 .expiresAt(refreshToken.getExpiresAt())

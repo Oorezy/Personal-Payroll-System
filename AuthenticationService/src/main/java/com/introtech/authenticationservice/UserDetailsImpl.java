@@ -1,7 +1,7 @@
 package com.introtech.authenticationservice;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.introtech.authenticationservice.entity.AuthUser;
+import com.introtech.authenticationservice.entity.UserRoles;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,41 +19,30 @@ public class UserDetailsImpl implements UserDetails {
 
     private Long id;
 
-//    private String email;
-
     private String username;
 
     private String name;
 
-    @JsonIgnore
     private String password;
 
-    private String phoneNumber;
-
-    private boolean accountNonLocked;
+    private String clientName;
 
     private boolean enabled;
 
-    private boolean accountNonExpired;
-
-    private String imageUrl;
-
-
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String password, List<String> roles) {
+    public UserDetailsImpl(Long id, String username, String password, String clientName, boolean enabled, List<String> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.enabled = true;
-        this.accountNonLocked = true;
-        this.accountNonExpired = true;
+        this.clientName = clientName;
+        this.enabled = enabled;
         this.authorities = roles.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     public static UserDetailsImpl build(AuthUser user) {
-        return new UserDetailsImpl(user.getId(), user.getEmail(), user.getPassword_hash(),
-                user.getRoles().stream().map(role -> role.getRoleName().name()).toList());
+        return new UserDetailsImpl(user.getId(), user.getEmail(), user.getPassword_hash(), user.getClient().getClientName(),
+                user.isEnabled(), user.getRoles().stream().map(UserRoles::getRoleName).toList());
     }
 
 }

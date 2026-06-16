@@ -30,7 +30,13 @@ public class JwtConfig {
                         return OAuth2TokenValidatorResult.failure(new OAuth2Error("Invalid token type"));
                     else
                         return OAuth2TokenValidatorResult.success();
-                });
+                },
+        jwt -> {
+            if (jwt.getAudience() != null && jwt.getAudience().contains(properties.clientName()))
+                return OAuth2TokenValidatorResult.success();
+            else
+                return OAuth2TokenValidatorResult.failure(new OAuth2Error("Invalid client name/audience"));
+        });
 
         decoder.setJwtValidator(issuerValidator);
         return decoder;
