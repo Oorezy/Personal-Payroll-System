@@ -55,7 +55,7 @@ public class AuthUser {
     )
     private Set<UserRoles> roles;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "client", referencedColumnName = "client_name")
     private Client client;
 
