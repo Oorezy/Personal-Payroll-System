@@ -65,6 +65,16 @@ public class PaymentRecordController extends BaseController<PaymentRecord, Long>
         return paymentRetryService.retryPayment(paymentId, request);
     }
 
+    @PostMapping("/{paymentId}/cancel")
+    public PaymentRecordResponse cancelPayment(@PathVariable Long paymentId) {
+        return paymentRecordService.cancelPayment(paymentId);
+    }
+
+    @PostMapping("/{paymentId}/skip")
+    public PaymentRecordResponse skipPayment(@PathVariable Long paymentId) {
+        return paymentRecordService.skipPayment(paymentId);
+    }
+
     @PostMapping("/generate-due")
     public Map<String, Object> generateDuePayments() {
         int generatedCount = paymentRecordGenerationService.generateDuePaymentRecords();

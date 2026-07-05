@@ -1,6 +1,7 @@
 package com.introtech.introtechservice.dto;
 
 import com.introtech.introtechservice.common.enums.PaymentFrequency;
+import com.introtech.introtechservice.common.enums.PaymentMode;
 import jakarta.validation.constraints.DecimalMin;
 
 import java.math.BigDecimal;
@@ -14,6 +15,8 @@ public record UpdatePaymentScheduleRequest(
         BigDecimal amount,
 
         PaymentFrequency frequency,
+
+        PaymentMode paymentMode,
 
         LocalDate nextDueDate,
 

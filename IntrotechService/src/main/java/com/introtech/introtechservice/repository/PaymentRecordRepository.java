@@ -5,6 +5,7 @@ import com.introtech.introtechservice.common.enums.PaymentStatus;
 import com.introtech.introtechservice.entity.PaymentRecord;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,20 @@ public interface PaymentRecordRepository extends BaseRepository<PaymentRecord, L
     List<PaymentRecord> findByWorkerIdAndUserIdOrderByDueDateDesc(
             Long workerId,
             Long userId
+    );
+
+    long countByUserIdAndStatus(Long userId, PaymentStatus status);
+
+    List<PaymentRecord> findTop5ByUserIdAndStatusInOrderByDueDateAsc(
+            Long userId,
+            Collection<PaymentStatus> statuses
+    );
+
+    List<PaymentRecord> findTop5ByUserIdOrderByCreatedDateDesc(Long userId);
+
+    List<PaymentRecord> findByUserIdAndDueDateBetweenOrderByDueDateDesc(
+            Long userId,
+            LocalDate startDate,
+            LocalDate endDate
     );
 }
