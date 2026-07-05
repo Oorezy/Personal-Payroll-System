@@ -1,6 +1,7 @@
 package com.introtech.introtechservice.service;
 
 import com.introtech.introtechservice.common.enums.PaymentFrequency;
+import com.introtech.introtechservice.common.enums.PaymentMode;
 import com.introtech.introtechservice.common.enums.PaymentStatus;
 import com.introtech.introtechservice.common.enums.ScheduleStatus;
 import com.introtech.introtechservice.entity.PaymentRecord;
@@ -20,6 +21,7 @@ public class PaymentRecordGenerationService {
 
     private final PaymentScheduleRepository paymentScheduleRepository;
     private final PaymentRecordRepository paymentRecordRepository;
+    private final AutomaticPaymentExecutionService automaticPaymentExecutionService;
 
     @Transactional
     public int generateDuePaymentRecords() {
@@ -76,12 +78,19 @@ public class PaymentRecordGenerationService {
                         .amount(schedule.getAmount())
                         .currency(schedule.getCurrency())
                         .dueDate(dueDate)
-                        .status(PaymentStatus.AWAITING_APPROVAL)
+                        .status(schedule.getPaymentMode() == PaymentMode.AUTOMATIC
+                                ? PaymentStatus.PROCESSING
+                                : PaymentStatus.AWAITING_APPROVAL)
                         .idempotencyKey(buildIdempotencyKey(schedule, dueDate))
                         .notes("Generated from schedule: " + schedule.getScheduleName())
                         .build();
 
-                paymentRecordRepository.save(paymentRecord);
+                PaymentRecord savedPayment = paymentRecordRepository.save(paymentRecord);
+
+                if (schedule.getPaymentMode() == PaymentMode.AUTOMATIC) {
+                    automaticPaymentExecutionService.execute(savedPayment);
+                    paymentRecordRepository.save(savedPayment);
+                }
                 generatedCount++;
             }
 
