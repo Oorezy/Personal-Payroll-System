@@ -47,8 +47,8 @@ public class AuthService {
 
         User user = User.builder()
                 .email(req.getEmail().toLowerCase())
-                .firstName(req.getFirstName().toLowerCase())
-                .lastName(req.getLastName().toLowerCase())
+                .firstName(req.getFirstName().trim().toLowerCase())
+                .lastName(req.getLastName().trim().toLowerCase())
                 .phoneNumber(req.getPhoneNumber())
                 .role(UserRole.USER)
                 .build();

@@ -46,7 +46,8 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public AppResponse handleAuthenticationException(AuthenticationException ex) {
 
-        return new AppResponse(ex.getMessage());
+        log.error(ex.getMessage(), ex);
+        return new AppResponse("Invalid username or password");
     }
 
 

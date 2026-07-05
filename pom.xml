@@ -20,6 +20,8 @@
         <module>DiscoveryService</module>
         <module>GatewayService</module>
         <module>AuthenticationService</module>
+        <module>AuthenticationResource</module>
+        <module>IntrotechService</module>
     </modules>
 
     <url/>
