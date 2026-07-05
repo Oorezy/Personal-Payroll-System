@@ -1,5 +1,6 @@
 package com.introtech.introtechservice.service;
 
+import com.introtech.introtechservice.common.enums.Currency;
 import com.introtech.introtechservice.common.enums.WorkerStatus;
 import com.introtech.introtechservice.dto.CreateWorkerRequest;
 import com.introtech.introtechservice.dto.UpdateWorkerRequest;
@@ -102,7 +103,15 @@ public class WorkerService {
         }
 
         if (request.preferredCurrency() != null) {
+            Currency previousCurrency = worker.getCurrency();
             worker.setCurrency(request.preferredCurrency());
+
+            if (previousCurrency != request.preferredCurrency()) {
+                worker.setPaymentDetailsVerified(false);
+                worker.setBankAccountNumberMasked(null);
+                worker.setIbanMasked(null);
+                worker.setProviderRecipientId(null);
+            }
         }
 
         if (request.paymentRegion() != null) {

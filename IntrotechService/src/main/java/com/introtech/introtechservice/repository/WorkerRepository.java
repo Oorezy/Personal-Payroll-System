@@ -15,4 +15,8 @@ public interface WorkerRepository extends BaseRepository<Worker, Long> {
     Optional<Worker> findByIdAndUserId(Long id, Long userId);
 
     boolean existsByIdAndUserId(Long id, Long userId);
+
+    long countByUserIdAndStatusNot(Long userId, WorkerStatus status);
+
+    long countByUserIdAndStatus(Long userId, WorkerStatus status);
 }
