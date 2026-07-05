@@ -19,6 +19,12 @@ public interface PaymentScheduleRepository extends BaseRepository<PaymentSchedul
 
     Optional<PaymentSchedule> findByIdAndUserId(Long id, Long userId);
 
+    long countByUserId(Long userId);
+
+    long countByUserIdAndStatusNot(Long userId, ScheduleStatus status);
+
+    long countByUserIdAndStatus(Long userId, ScheduleStatus status);
+
     List<PaymentSchedule> findByWorkerIdAndUserIdOrderByCreatedDateDesc(
             Long workerId,
             Long userId

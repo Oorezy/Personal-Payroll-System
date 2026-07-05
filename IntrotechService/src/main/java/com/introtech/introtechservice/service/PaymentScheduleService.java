@@ -48,7 +48,9 @@ public class PaymentScheduleService {
                 .amount(request.amount())
                 .currency(request.currency())
                 .frequency(request.frequency())
-                .paymentMode(PaymentMode.MANUAL_APPROVAL)
+                .paymentMode(request.paymentMode() == null
+                        ? PaymentMode.MANUAL_APPROVAL
+                        : request.paymentMode())
                 .startDate(request.startDate())
                 .nextDueDate(request.firstDueDate())
                 .endDate(request.endDate())
@@ -118,6 +120,10 @@ public class PaymentScheduleService {
 
         if (request.frequency() != null) {
             schedule.setFrequency(request.frequency());
+        }
+
+        if (request.paymentMode() != null) {
+            schedule.setPaymentMode(request.paymentMode());
         }
 
         if (request.nextDueDate() != null) {

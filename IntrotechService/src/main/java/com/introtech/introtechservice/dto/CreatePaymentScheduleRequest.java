@@ -2,6 +2,7 @@ package com.introtech.introtechservice.dto;
 
 import com.introtech.introtechservice.common.enums.Currency;
 import com.introtech.introtechservice.common.enums.PaymentFrequency;
+import com.introtech.introtechservice.common.enums.PaymentMode;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -27,6 +28,8 @@ public record CreatePaymentScheduleRequest(
 
         @NotNull(message = "Payment frequency is required")
         PaymentFrequency frequency,
+
+        PaymentMode paymentMode,
 
         @NotNull(message = "Start date is required")
         LocalDate startDate,
