@@ -1,0 +1,18 @@
+{
+  "/payroll": {
+    "target": "http://localhost:7001",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+
+  "/authn": {
+    "target": "http://localhost:7001",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/authn": "/auth"
+    }
+  }
+}

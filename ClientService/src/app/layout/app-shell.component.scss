@@ -1,0 +1,29 @@
+.shell { min-height: 100vh; }
+.sidebar { position: fixed; inset: 0 auto 0 0; z-index: 100; display: flex; width: 258px; flex-direction: column; padding: 24px 17px 17px; color: #dbe9e1; background: var(--brand-900); }
+.brand { display: flex; align-items: center; gap: 11px; padding: 0 10px 27px; color: white; font-size: 1.22rem; font-weight: 850; letter-spacing: -.03em; }
+.brand-mark { display: grid; width: 34px; height: 34px; grid-template-columns: repeat(3, 5px); align-items: end; justify-content: center; gap: 3px; padding-bottom: 8px; background: var(--accent); border-radius: 10px; }
+.brand-mark i { display: block; height: 11px; background: var(--brand-900); border-radius: 2px; }.brand-mark i:nth-child(2) { height: 17px; }.brand-mark i:nth-child(3) { height: 8px; }
+nav { display: grid; gap: 4px; }
+nav a { display: flex; min-height: 44px; align-items: center; gap: 12px; padding: 8px 12px; color: #afc4b8; border-radius: 10px; font-size: .88rem; font-weight: 650; transition: color .16s ease, background .16s ease; }
+nav a:hover { color: white; background: rgba(255,255,255,.06); } nav a.active { color: white; background: rgba(255,255,255,.115); box-shadow: inset 3px 0 var(--accent); }
+.nav-label { margin: 3px 12px 8px; color: #668577; font-size: .65rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }.nav-label-spaced { margin-top: 20px; }
+.nav-icon { display: grid; width: 24px; height: 24px; place-items: center; color: #91ad9e; font-size: 1rem; }
+.support-card { display: flex; align-items: center; gap: 10px; margin-top: auto; padding: 14px; background: rgba(255,255,255,.065); border: 1px solid rgba(255,255,255,.08); border-radius: 13px; }
+.support-icon { display: grid; width: 30px; height: 30px; place-items: center; color: var(--brand-900); background: var(--accent); border-radius: 9px; font-weight: 900; }
+.support-card div, .sidebar-user div { min-width: 0; display: grid; gap: 3px; }.support-card strong, .sidebar-user strong { color: white; font-size: .77rem; }.support-card small, .sidebar-user small { overflow: hidden; color: #8faca0; font-size: .67rem; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-user { display: grid; grid-template-columns: 38px minmax(0,1fr) auto; align-items: center; gap: 10px; margin-top: 15px; padding: 15px 7px 2px; border-top: 1px solid rgba(255,255,255,.1); }.sidebar-user button { color: #91ad9e; background: none; border: 0; font-size: 1rem; }
+.sidebar .avatar { color: var(--brand-900); background: #cce0d5; }
+.workspace { min-height: 100vh; margin-left: 258px; }
+.topbar { position: sticky; top: 0; z-index: 60; display: flex; height: 70px; align-items: center; justify-content: space-between; padding: 0 34px; background: rgba(255,255,255,.91); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+.topbar-copy { display: flex; align-items: center; gap: 9px; color: var(--ink-600); font-size: .8rem; font-weight: 650; }.live-dot { width: 7px; height: 7px; background: #39a16d; border-radius: 50%; box-shadow: 0 0 0 4px #e7f5ed; }
+.topbar-actions { display: flex; align-items: center; gap: 9px; }.topbar-icon { display: grid; width: 38px; height: 38px; place-items: center; color: var(--ink-600); background: white; border: 1px solid var(--line); border-radius: 10px; }
+.profile-chip { display: flex; align-items: center; gap: 9px; padding: 4px 9px 4px 4px; border-radius: 11px; font-size: .78rem; font-weight: 750; }.profile-chip:hover { background: var(--surface-warm); }.profile-chip .avatar { width: 32px; height: 32px; border-radius: 9px; }
+main { max-width: 1500px; margin: 0 auto; padding: 32px 34px 48px; }
+.menu-button { display: none; width: 40px; height: 40px; place-items: center; gap: 4px; padding: 10px; background: white; border: 1px solid var(--line); border-radius: 10px; }.menu-button span { display: block; width: 18px; height: 2px; background: var(--ink-800); }
+.mobile-backdrop { display: none; }
+@media (max-width: 980px) {
+  .sidebar { transform: translateX(-100%); transition: transform .22s ease; }.sidebar.open { transform: translateX(0); }
+  .mobile-backdrop { position: fixed; inset: 0; z-index: 95; display: block; background: rgba(14,31,24,.4); border: 0; }
+  .workspace { margin-left: 0; }.menu-button { display: grid; }.topbar-copy { display: none; }
+}
+@media (max-width: 650px) { .topbar { height: 62px; padding-inline: 16px; }.profile-chip > span:last-child { display: none; } main { padding: 24px 16px 40px; } }
