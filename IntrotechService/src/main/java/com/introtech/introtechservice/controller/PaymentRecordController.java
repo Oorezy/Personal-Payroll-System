@@ -6,6 +6,7 @@ import com.introtech.introtechservice.dto.MockPaymentFailureRequest;
 import com.introtech.introtechservice.dto.NoteRequest;
 import com.introtech.introtechservice.dto.PaymentRecordResponse;
 import com.introtech.introtechservice.entity.PaymentRecord;
+import com.introtech.introtechservice.exceptions.DataValidationException;
 import com.introtech.introtechservice.service.PaymentApprovalService;
 import com.introtech.introtechservice.service.PaymentConfirmationService;
 import com.introtech.introtechservice.service.PaymentRecordGenerationService;
@@ -53,7 +54,7 @@ public class PaymentRecordController extends BaseController<PaymentRecord, Long>
     public PaymentRecordResponse approvePayment(
             @PathVariable Long paymentId,
             @Valid @RequestBody(required = false) NoteRequest request
-    ) {
+    ) throws DataValidationException {
         return paymentApprovalService.approvePayment(paymentId, request);
     }
 
@@ -61,7 +62,7 @@ public class PaymentRecordController extends BaseController<PaymentRecord, Long>
     public PaymentRecordResponse retryPayment(
             @PathVariable Long paymentId,
             @Valid @RequestBody(required = false) NoteRequest request
-    ) {
+    ) throws DataValidationException {
         return paymentRetryService.retryPayment(paymentId, request);
     }
 

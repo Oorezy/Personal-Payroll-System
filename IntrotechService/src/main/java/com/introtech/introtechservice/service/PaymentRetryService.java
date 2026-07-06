@@ -3,9 +3,11 @@ package com.introtech.introtechservice.service;
 import com.introtech.introtechservice.common.enums.PaymentStatus;
 import com.introtech.introtechservice.dto.NoteRequest;
 import com.introtech.introtechservice.dto.PaymentRecordResponse;
+import com.introtech.introtechservice.entity.PaymentAccount;
 import com.introtech.introtechservice.entity.PaymentRecord;
 import com.introtech.introtechservice.entity.User;
 import com.introtech.introtechservice.entity.Worker;
+import com.introtech.introtechservice.exceptions.DataValidationException;
 import com.introtech.introtechservice.mappers.PaymentRecordMapper;
 import com.introtech.introtechservice.provider.PaymentProviderSelector;
 import com.introtech.introtechservice.provider.PaymentProviderService;
@@ -34,12 +36,13 @@ public class PaymentRetryService {
     private final UserContextService userContextService;
     private final PaymentProviderSelector paymentProviderSelector;
     private final PaymentRecordMapper paymentRecordMapper;
+    private final PaymentAccountService paymentAccountService;
 
     @Transactional
     public PaymentRecordResponse retryPayment(
             Long paymentId,
             NoteRequest request
-    ) {
+    ) throws DataValidationException {
         User currentUser = userContextService.getCurrentUser();
 
         PaymentRecord paymentRecord = paymentRecordRepository
@@ -56,6 +59,11 @@ public class PaymentRetryService {
 
         int nextRetryCount = paymentRecord.getRetryCount() + 1;
 
+        PaymentAccount paymentAccount = paymentAccountService.getDefaultPaymentAccount(
+                currentUser.getId(),
+                paymentRecord.getCurrency()
+        );
+
         String retryIdempotencyKey = buildRetryIdempotencyKey(paymentRecord, nextRetryCount);
 
         TransferRequest transferRequest = new TransferRequest(
@@ -66,7 +74,11 @@ public class PaymentRetryService {
                 paymentRecord.getCurrency(),
                 retryIdempotencyKey,
                 worker.getProviderRecipientId(),
-                buildPaymentDescription(paymentRecord, nextRetryCount)
+                buildPaymentDescription(paymentRecord, nextRetryCount),
+
+                paymentAccount.getId(),
+                paymentAccount.getProviderAccountId(),
+                paymentAccount.getProviderAuthorizationId()
         );
 
         TransferResponse transferResponse = provider.initiateTransfer(transferRequest);

@@ -3,9 +3,11 @@ package com.introtech.introtechservice.service;
 import com.introtech.introtechservice.common.enums.PaymentStatus;
 import com.introtech.introtechservice.dto.NoteRequest;
 import com.introtech.introtechservice.dto.PaymentRecordResponse;
+import com.introtech.introtechservice.entity.PaymentAccount;
 import com.introtech.introtechservice.entity.PaymentRecord;
 import com.introtech.introtechservice.entity.User;
 import com.introtech.introtechservice.entity.Worker;
+import com.introtech.introtechservice.exceptions.DataValidationException;
 import com.introtech.introtechservice.mappers.PaymentRecordMapper;
 import com.introtech.introtechservice.provider.PaymentProviderSelector;
 import com.introtech.introtechservice.provider.PaymentProviderService;
@@ -32,12 +34,13 @@ public class PaymentApprovalService {
     private final UserContextService userContextService;
     private final PaymentProviderSelector paymentProviderSelector;
     private final PaymentRecordMapper paymentRecordMapper;
+    private final PaymentAccountService paymentAccountService;
 
     @Transactional
     public PaymentRecordResponse approvePayment(
             Long paymentId,
             NoteRequest request
-    ) {
+    ) throws DataValidationException {
         User currentUser = userContextService.getCurrentUser();
 
         PaymentRecord paymentRecord = paymentRecordRepository
@@ -52,6 +55,11 @@ public class PaymentApprovalService {
                 paymentRecord.getCurrency()
         );
 
+        PaymentAccount paymentAccount = paymentAccountService.getDefaultPaymentAccount(
+                currentUser.getId(),
+                paymentRecord.getCurrency()
+        );
+
         String idempotencyKey = ensureIdempotencyKey(paymentRecord);
 
         TransferRequest transferRequest = new TransferRequest(
@@ -62,7 +70,11 @@ public class PaymentApprovalService {
                 paymentRecord.getCurrency(),
                 idempotencyKey,
                 worker.getProviderRecipientId(),
-                buildPaymentDescription(paymentRecord)
+                buildPaymentDescription(paymentRecord),
+
+                paymentAccount.getId(),
+                paymentAccount.getProviderAccountId(),
+                paymentAccount.getProviderAuthorizationId()
         );
 
         TransferResponse transferResponse = provider.initiateTransfer(transferRequest);

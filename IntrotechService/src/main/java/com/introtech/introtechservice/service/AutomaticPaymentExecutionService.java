@@ -42,7 +42,11 @@ public class AutomaticPaymentExecutionService {
                     paymentRecord.getCurrency(),
                     paymentRecord.getIdempotencyKey(),
                     worker.getProviderRecipientId(),
-                    "Automatic payroll payment to " + worker.getFullName()
+                    "Automatic payroll payment to " + worker.getFullName(),
+
+                    2L,
+                    "",
+                    ""
             ));
 
             paymentRecord.setProviderName(response.providerName());

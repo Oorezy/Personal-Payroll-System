@@ -21,6 +21,15 @@ public class MockPaymentProviderService implements PaymentProviderService {
 
     @Override
     public TransferResponse initiateTransfer(TransferRequest request) {
+        if (request.paymentAccountId() == null) {
+            return new TransferResponse(
+                    providerName(),
+                    null,
+                    null,
+                    ProviderTransferStatus.FAILED,
+                    "Missing employer payment account"
+            );
+        }
         String transactionId = "mock_txn_" + UUID.randomUUID();
         String transferReference = "mock_ref_" + request.idempotencyKey();
 

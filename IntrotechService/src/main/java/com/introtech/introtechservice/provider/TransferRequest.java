@@ -12,6 +12,10 @@ public record TransferRequest(
         Currency currency,
         String idempotencyKey,
         String providerRecipientId,
-        String description
+        String description,
+
+        Long paymentAccountId,
+        String providerAccountId,
+        String providerAuthorizationId
 ) {
 }
