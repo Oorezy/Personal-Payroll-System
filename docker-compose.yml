@@ -3,9 +3,10 @@ name: Introtech Microservices
 services:
 
   discovery-service:
-    build:
-      context: .
-      dockerfile: ./DiscoveryService/Dockerfile
+    image: oorezy/discovery-service:latest
+#    build:
+#      context: .
+#      dockerfile: ./DiscoveryService/Dockerfile
     container_name: discovery-service
     ports:
       - "7000:7000"
@@ -14,9 +15,10 @@ services:
     restart: always
 
   gateway-service:
-    build:
-      context: .
-      dockerfile: ./GatewayService/Dockerfile
+    image: oorezy/gateway-service:latest
+#    build:
+#      context: .
+#      dockerfile: ./GatewayService/Dockerfile
     container_name: gateway-service
     ports:
       - "7001:7001"
@@ -27,9 +29,10 @@ services:
     restart: always
 
   authentication-service:
-    build:
-      context: .
-      dockerfile: ./AuthenticationService/Dockerfile
+    image: oorezy/authentication-service:latest
+#    build:
+#      context: .
+#      dockerfile: ./AuthenticationService/Dockerfile
     container_name: authentication-service
     ports:
       - "7002:7002"
@@ -40,9 +43,10 @@ services:
     restart: always
 
   introtech-service:
-    build:
-      context: .
-      dockerfile: ./IntrotechService/Dockerfile
+    image: oorezy/introtech-service:latest
+#    build:
+#      context: .
+#      dockerfile: ./IntrotechService/Dockerfile
     container_name: introtech-service
     ports:
       - "7004:7004"
@@ -53,7 +57,8 @@ services:
     restart: always
 
   frontend:
-    build: ./ClientService
+    image: oorezy/client-service:latest
+#    build: ./ClientService
     container_name: client-service
     ports:
       - "4200:80"
