@@ -21,7 +21,7 @@ public class UserContextService {
         }
         String email = authentication.getName();
 
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
     }
 

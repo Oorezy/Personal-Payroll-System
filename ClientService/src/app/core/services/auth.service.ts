@@ -20,7 +20,7 @@ export class AuthService {
   get accessToken(): string | null { return this.accessTokenState(); }
 
   login(request: LoginRequest): Observable<UserProfile> {
-    return this.http.post<JwtTokenResponse>('/authn/login', request).pipe(
+    return this.http.post<JwtTokenResponse>('/server/auth/login', request).pipe(
       tap(tokens => this.storeTokens(tokens)),
       switchMap(() => this.loadProfile()),
       catchError(error => throwError(() => this.authError(error)))
@@ -28,7 +28,7 @@ export class AuthService {
   }
 
   register(request: RegisterRequest): Observable<void> {
-    return this.http.post<ApiEnvelope<unknown>>('/payroll/register', request).pipe(
+    return this.http.post<ApiEnvelope<unknown>>('/server/payroll/register', request).pipe(
       map(response => {
         if (!response.status) throw new Error(response.message || 'Registration failed.');
       }),
@@ -37,13 +37,13 @@ export class AuthService {
   }
 
   loadProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>('/payroll/api/profile').pipe(
+    return this.http.get<UserProfile>('/server/payroll/api/profile').pipe(
       tap(profile => this.profileState.set(profile))
     );
   }
 
   updateProfile(input: Pick<UserProfile, 'firstName' | 'lastName' | 'phoneNumber'>): Observable<UserProfile> {
-    return this.http.put<UserProfile>('/payroll/api/profile', input).pipe(
+    return this.http.put<UserProfile>('/server/payroll/api/profile', input).pipe(
       tap(profile => this.profileState.set(profile))
     );
   }
@@ -60,7 +60,7 @@ export class AuthService {
     localStorage.removeItem(EXPIRES_AT);
     this.accessTokenState.set(null);
     this.profileState.set(null);
-    if (redirect) void this.router.navigate(['/auth/login']);
+    if (redirect) void this.router.navigate(['/login']);
   }
 
   private storeTokens(tokens: JwtTokenResponse): void {

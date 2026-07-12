@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <main class="auth-page">
       <section class="story">
-        <a class="brand" routerLink="/auth/login"><span class="brand-mark"><i></i><i></i><i></i></span>IntroTech</a>
+        <a class="brand" routerLink="/login"><span class="brand-mark"><i></i><i></i><i></i></span>IntroTech</a>
         <div class="story-copy">
           <p class="eyebrow">Personal payroll, simplified</p>
           <h1>Pay people on time.<br><em>Keep your peace of mind.</em></h1>

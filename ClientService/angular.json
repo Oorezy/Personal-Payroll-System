@@ -4,7 +4,7 @@
   "cli": { "packageManager": "npm" },
   "newProjectRoot": "projects",
   "projects": {
-    "introtech-client": {
+    "client-service": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
@@ -37,8 +37,8 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-            "production": { "buildTarget": "introtech-client:build:production" },
-            "development": { "buildTarget": "introtech-client:build:development" }
+            "production": { "buildTarget": "client-service:build:production" },
+            "development": { "buildTarget": "client-service:build:development" }
           },
           "defaultConfiguration": "development"
         }

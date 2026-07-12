@@ -1,0 +1,60 @@
+name: Introtech Microservices
+
+services:
+
+  discovery-service:
+    build:
+      context: .
+      dockerfile: ./DiscoveryService/Dockerfile
+    container_name: discovery-service
+    ports:
+      - "7000:7000"
+    volumes:
+      - ${HOME_DIR}:/INTROTECH
+    restart: always
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: ./GatewayService/Dockerfile
+    container_name: gateway-service
+    ports:
+      - "7001:7001"
+    volumes:
+      - ${HOME_DIR}:/INTROTECH
+    depends_on:
+      - discovery-service
+    restart: always
+
+  authentication-service:
+    build:
+      context: .
+      dockerfile: ./AuthenticationService/Dockerfile
+    container_name: authentication-service
+    ports:
+      - "7002:7002"
+    volumes:
+      - ${HOME_DIR}:/INTROTECH
+    depends_on:
+      - discovery-service
+    restart: always
+
+  introtech-service:
+    build:
+      context: .
+      dockerfile: ./IntrotechService/Dockerfile
+    container_name: introtech-service
+    ports:
+      - "7004:7004"
+    volumes:
+      - ${HOME_DIR}:/INTROTECH
+    depends_on:
+      - discovery-service
+    restart: always
+
+  frontend:
+    build: ./ClientService
+    container_name: client-service
+    ports:
+      - "4200:80"
+    restart: always

@@ -5,7 +5,7 @@ import { ApiEnvelope } from '../models/api.models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiClientService {
-  private readonly baseUrl = '/payroll/api';
+  private readonly baseUrl = '/server/payroll/api';
 
   constructor(private readonly http: HttpClient) {}
 

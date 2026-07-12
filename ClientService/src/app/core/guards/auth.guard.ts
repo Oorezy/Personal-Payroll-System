@@ -8,5 +8,5 @@ export const authGuard: CanActivateFn = () => {
     auth.ensureProfile();
     return true;
   }
-  return inject(Router).createUrlTree(['/auth/login']);
+  return inject(Router).createUrlTree(['/login']);
 };

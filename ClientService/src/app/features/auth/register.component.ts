@@ -24,7 +24,7 @@ import { AuthFrameComponent } from './auth-frame.component';
         <button class="btn btn-primary submit" type="submit" [disabled]="submitting()">
           @if (submitting()) { <span class="spinner"></span> Creating workspace… } @else { Create account <span>→</span> }
         </button>
-        <p class="switch">Already have an account? <a routerLink="/auth/login">Sign in</a></p>
+        <p class="switch">Already have an account? <a routerLink="/login">Sign in</a></p>
       </form>
     </app-auth-frame>
   `,
@@ -63,7 +63,7 @@ export class RegisterComponent {
     this.submitting.set(true);
     const { confirmPassword: _, terms: __, ...request } = value;
     this.auth.register(request).subscribe({
-      next: () => void this.router.navigate(['/auth/login'], { queryParams: { registered: 'true' } }),
+      next: () => void this.router.navigate(['/login'], { queryParams: { registered: 'true' } }),
       error: (error: Error) => { this.error.set(error.message); this.submitting.set(false); }
     });
   }

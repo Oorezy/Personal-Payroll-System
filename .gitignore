@@ -57,7 +57,8 @@ dist-ssr
 *.sw?
 
 /INTROTECH/
+**/.angular
 *.pem
-application.properties
+*.properties
 **/node_modules
 *.env
