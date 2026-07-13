@@ -38,11 +38,12 @@ jobs:
 
       - name: Build & Push frontend
         run: |
-          docker build -t oorezy/client-service:latest -f ClientService/Dockerfile .
+          docker build -t oorezy/client-service:latest ./ClientService
           docker push oorezy/client-service:latest
 
   deploy:
     runs-on: self-hosted
+    needs: build
 
     steps:
       - name: Deploy with Docker Compose

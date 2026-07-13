@@ -17,7 +17,7 @@ public class PaymentGenerationScheduler {
      * For local development, you can temporarily change this to fixedRate.
      */
 //    @Scheduled(cron = "0 0 6 * * *")
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 150000)
     public void generateDuePaymentsDaily() {
         int generatedCount = paymentRecordGenerationService.generateDuePaymentRecords();
 
