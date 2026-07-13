@@ -25,7 +25,7 @@ import { AuthFrameComponent } from './auth-frame.component';
         <button class="btn btn-primary submit" type="submit" [disabled]="submitting()">
           @if (submitting()) { <span class="spinner"></span> Signing in… } @else { Sign in <span>→</span> }
         </button>
-        <p class="switch">New to IntroTech? <a routerLink="/auth/register">Create your account</a></p>
+        <p class="switch">New to IntroTech? <a routerLink="/register">Create your account</a></p>
       </form>
     </app-auth-frame>
   `,
