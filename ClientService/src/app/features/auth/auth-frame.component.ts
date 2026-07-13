@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
       <section class="story">
         <a class="brand" routerLink="/login"><span class="brand-mark"><i></i><i></i><i></i></span>IntroTech</a>
         <div class="story-copy">
-          <p class="eyebrow">Personal payroll, simplified</p>
+          <p class="eyebrow">Personal payroll</p>
           <h1>Pay people on time.<br><em>Keep your peace of mind.</em></h1>
           <p>One calm workspace for workers, schedules and payments across Europe and Nigeria.</p>
           <div class="mini-dashboard">
