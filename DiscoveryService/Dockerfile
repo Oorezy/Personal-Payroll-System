@@ -22,4 +22,4 @@ WORKDIR /app
 
 COPY --from=builder /build/DiscoveryService/target/*.jar app.jar
 EXPOSE 7000
-ENTRYPOINT ["java","-DHOME_DIR=/INTROTECH", "-Dspring.config.location=/INTROTECH/configs/", "-Dspring.config.name=discovery-service", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -DHOME_DIR=/INTROTECH -Dspring.config.location=/INTROTECH/configs/ -Dspring.config.name=discovery-service -Dspring.profiles.active=prod -jar app.jar"]

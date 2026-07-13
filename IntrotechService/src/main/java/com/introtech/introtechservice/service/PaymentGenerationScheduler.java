@@ -16,8 +16,8 @@ public class PaymentGenerationScheduler {
      * Runs every day at 6:00 AM server time.
      * For local development, you can temporarily change this to fixedRate.
      */
-    @Scheduled(cron = "0 0 6 * * *")
-//    @Scheduled(fixedRate = 15000)
+//    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(fixedRate = 300000)
     public void generateDuePaymentsDaily() {
         int generatedCount = paymentRecordGenerationService.generateDuePaymentRecords();
 

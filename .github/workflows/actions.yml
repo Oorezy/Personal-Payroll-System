@@ -1,0 +1,59 @@
+name: Build and Deploy to VM
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build & Push discovery-service
+        run: |
+          docker build -t oorezy/discovery-service:latest -f DiscoveryService/Dockerfile .
+          docker push oorezy/discovery-service:latest
+
+      - name: Build & Push gateway-service
+        run: |
+          docker build -t oorezy/gateway-service:latest -f GatewayService/Dockerfile .
+          docker push oorezy/gateway-service:latest
+
+      - name: Build & Push authentication-service
+        run: |
+          docker build -t oorezy/authentication-service:latest -f AuthenticationService/Dockerfile .
+          docker push oorezy/authentication-service:latest
+
+      - name: Build & Push introtech-service
+        run: |
+          docker build -t oorezy/introtech-service:latest -f IntrotechService/Dockerfile .
+          docker push oorezy/introtech-service:latest
+
+      - name: Build & Push frontend
+        run: |
+          docker build -t oorezy/client-service:latest -f ClientService/Dockerfile .
+          docker push oorezy/client-service:latest
+
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy with Docker Compose
+        run: |
+          cd /home/ooreoluwa/IntroTech/Personal-Payroll-System
+          
+          git pull origin prod
+          git reset --hard origin/prod
+
+          echo "Pulling latest images..."
+          docker compose pull
+
+          echo "Restarting containers..."
+          docker compose up -d

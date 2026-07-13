@@ -4,24 +4,28 @@ services:
 
   discovery-service:
     image: oorezy/discovery-service:latest
-#    build:
-#      context: .
-#      dockerfile: ./DiscoveryService/Dockerfile
+    build:
+      context: .
+      dockerfile: ./DiscoveryService/Dockerfile
     container_name: discovery-service
     ports:
       - "7000:7000"
+    environment:
+      JAVA_OPTS: "-Xms64m -Xmx128m"
     volumes:
       - ${HOME_DIR}:/INTROTECH
     restart: always
 
   gateway-service:
     image: oorezy/gateway-service:latest
-#    build:
-#      context: .
-#      dockerfile: ./GatewayService/Dockerfile
+    build:
+      context: .
+      dockerfile: ./GatewayService/Dockerfile
     container_name: gateway-service
     ports:
       - "7001:7001"
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx256m"
     volumes:
       - ${HOME_DIR}:/INTROTECH
     depends_on:
@@ -30,12 +34,14 @@ services:
 
   authentication-service:
     image: oorezy/authentication-service:latest
-#    build:
-#      context: .
-#      dockerfile: ./AuthenticationService/Dockerfile
+    build:
+      context: .
+      dockerfile: ./AuthenticationService/Dockerfile
     container_name: authentication-service
     ports:
       - "7002:7002"
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx256m"
     volumes:
       - ${HOME_DIR}:/INTROTECH
     depends_on:
@@ -44,12 +50,14 @@ services:
 
   introtech-service:
     image: oorezy/introtech-service:latest
-#    build:
-#      context: .
-#      dockerfile: ./IntrotechService/Dockerfile
+    build:
+      context: .
+      dockerfile: ./IntrotechService/Dockerfile
     container_name: introtech-service
     ports:
       - "7004:7004"
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx384m"
     volumes:
       - ${HOME_DIR}:/INTROTECH
     depends_on:
@@ -58,7 +66,7 @@ services:
 
   frontend:
     image: oorezy/client-service:latest
-#    build: ./ClientService
+    build: ./ClientService
     container_name: client-service
     ports:
       - "4200:80"
