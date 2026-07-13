@@ -16,7 +16,7 @@ FROM nginx:alpine
 
 COPY --from=builder /app/dist/client-service/browser /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ClientService/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
