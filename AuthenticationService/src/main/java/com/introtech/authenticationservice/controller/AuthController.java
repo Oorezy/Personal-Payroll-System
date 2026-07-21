@@ -78,15 +78,15 @@ public class AuthController {
     @PostMapping("/login")
     public JwtTokenResponse login(@RequestBody @Valid LoginRequest request) throws CustomException {
 
-        if (!authUserService.isUserVerified(request.getEmail())){
-            throw new CustomException("Email not Verified");
-        }
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
             if (!authentication.isAuthenticated()) {
                 throw new CustomException("Authentication failed. Please check credentials");
             }
+        if (!authUserService.isUserVerified(request.getEmail())){
+            throw new CustomException("Email not Verified");
+        }
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return jwtService.generateToken(userDetails);
     }
