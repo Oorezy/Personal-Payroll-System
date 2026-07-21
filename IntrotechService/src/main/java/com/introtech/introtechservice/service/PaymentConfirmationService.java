@@ -8,16 +8,20 @@ import com.introtech.introtechservice.entity.User;
 import com.introtech.introtechservice.mappers.PaymentRecordMapper;
 import com.introtech.introtechservice.repository.PaymentRecordRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaymentConfirmationService {
@@ -102,5 +106,30 @@ public class PaymentConfirmationService {
                     "Payment does not have a provider transfer reference"
             );
         }
+    }
+
+    //TEMPORARY
+    @Scheduled(fixedRate = 90000)
+    public void autoConfirm(){
+
+        log.debug("Auto confirming payments with MockProvider");
+
+        List<PaymentRecord> payments = paymentRecordRepository.findAllByStatusAndProviderName(
+                PaymentStatus.PROCESSING,
+                "MOCK_PROVIDER"
+        );
+        for(PaymentRecord paymentRecord : payments){
+            validateCanBeConfirmed(paymentRecord);
+
+            paymentRecord.setStatus(PaymentStatus.PAID);
+            paymentRecord.setPaidDate(LocalDate.now());
+            paymentRecord.setConfirmedAt(LocalDateTime.now());
+            paymentRecord.setFailureReason(null);
+
+            paymentRecordRepository.save(paymentRecord);
+        }
+
+
+
     }
 }

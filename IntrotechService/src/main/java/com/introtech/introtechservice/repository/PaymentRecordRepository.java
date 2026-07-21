@@ -40,4 +40,6 @@ public interface PaymentRecordRepository extends BaseRepository<PaymentRecord, L
             LocalDate startDate,
             LocalDate endDate
     );
+
+    List<PaymentRecord> findAllByStatusAndProviderName(PaymentStatus status, String providerName);
 }

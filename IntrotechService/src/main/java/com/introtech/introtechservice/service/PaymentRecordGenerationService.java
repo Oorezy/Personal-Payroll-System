@@ -22,6 +22,7 @@ public class PaymentRecordGenerationService {
     private final PaymentScheduleRepository paymentScheduleRepository;
     private final PaymentRecordRepository paymentRecordRepository;
     private final AutomaticPaymentExecutionService automaticPaymentExecutionService;
+    private final PaymentNotificationService paymentNotificationService;
 
     @Transactional
     public int generateDuePaymentRecords() {
@@ -90,6 +91,8 @@ public class PaymentRecordGenerationService {
                 if (schedule.getPaymentMode() == PaymentMode.AUTOMATIC) {
                     automaticPaymentExecutionService.execute(savedPayment);
                     paymentRecordRepository.save(savedPayment);
+                } else {
+                    paymentNotificationService.sendPendingApprovalEmail(savedPayment);
                 }
                 generatedCount++;
             }
