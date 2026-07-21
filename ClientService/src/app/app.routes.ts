@@ -9,6 +9,7 @@ export const routes: Routes = [
     children: [
       { path: 'login', loadComponent: () => import('./features/auth/login.component').then(m => m.LoginComponent) },
       { path: 'register', loadComponent: () => import('./features/auth/register.component').then(m => m.RegisterComponent) },
+      { path: 'verify-email', title: 'Verify email · IntroTech', loadComponent: () => import('./features/auth/verify-email.component').then(m => m.VerifyEmailComponent) },
       { path: '', pathMatch: 'full', redirectTo: 'login' }
     ]
   },

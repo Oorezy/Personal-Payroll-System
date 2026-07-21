@@ -23,7 +23,7 @@ public class AuthUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        AuthUser user = repository.findByEmailIgnoreCase(username);
+        AuthUser user = repository.findByEmailIgnoreCase(username).orElse(null);
         if (user != null) {
             return UserDetailsImpl.build(user);
         } else
@@ -33,5 +33,22 @@ public class AuthUserService implements UserDetailsService {
     public UserDetailsImpl findUserById(Long id) {
         return repository.findById(id).map(UserDetailsImpl::build).orElseThrow(
                 () -> new UsernameNotFoundException("User not found with id: " + id));
+    }
+
+    public UserDetailsImpl findUserByEmail(String email) {
+        return repository.findByEmailIgnoreCase(email).map(UserDetailsImpl::build).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with email: " + email));
+    }
+
+    public boolean existsByEmailAndClient_ClientName(String email, String clientClientName){
+        return repository.existsByEmailAndClient_ClientName(email, clientClientName);
+    }
+
+    public AuthUser save(AuthUser authUser) {
+        return repository.save(authUser);
+    }
+
+    public boolean isUserVerified(String email) {
+        return repository.existsByEmailIgnoreCaseAndVerified(email, true);
     }
 }

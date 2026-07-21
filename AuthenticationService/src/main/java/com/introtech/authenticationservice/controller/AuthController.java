@@ -4,15 +4,18 @@ import com.introtech.authenticationservice.AppResponse;
 import com.introtech.authenticationservice.CustomException;
 import com.introtech.authenticationservice.UserDetailsImpl;
 import com.introtech.authenticationservice.dto.LoginRequest;
+import com.introtech.authenticationservice.dto.OtpRequest;
 import com.introtech.authenticationservice.dto.RegisterRequest;
 import com.introtech.authenticationservice.entity.AuthUser;
 import com.introtech.authenticationservice.entity.Client;
 import com.introtech.authenticationservice.entity.UserRoles;
 import com.introtech.authenticationservice.jwt.JwtService;
 import com.introtech.authenticationservice.jwt.JwtTokenResponse;
-import com.introtech.authenticationservice.repository.AuthUserRepository;
+import com.introtech.authenticationservice.service.AuthService;
+import com.introtech.authenticationservice.service.AuthUserService;
 import com.introtech.authenticationservice.service.ClientService;
 import com.introtech.authenticationservice.service.UserRoleService;
+import com.introtech.introtechutil.dto.ResendOtpRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,20 +39,20 @@ import java.util.Set;
 @Slf4j
 public class AuthController {
 
-    private final AuthUserRepository authUserRepository;
+    private final AuthUserService authUserService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final ClientService clientService;
     private final UserRoleService userRoleService;
-
+    private final AuthService authService;
 
     @PostMapping("/register")
     public AppResponse register(@RequestBody @Valid RegisterRequest request) throws CustomException {
 
         Client client = clientService.clientExists(request.getClientName());
         if (client != null) {
-            if (authUserRepository.existsByEmailAndClient_ClientName(request.getEmail().toLowerCase(), request.getClientName())) {
+            if (authUserService.existsByEmailAndClient_ClientName(request.getEmail().toLowerCase(), request.getClientName())) {
                 throw new CustomException("Email Already Exists");
             }
             Set<UserRoles> userRoles = userRoleService.getUserRoles(request.getRoles(), client);
@@ -63,7 +66,9 @@ public class AuthController {
             user.setRoles(userRoles);
             user.setClient(client);
 
-            authUserRepository.save(user);
+            user = authUserService.save(user);
+
+            authService.sendOtp(user); //Use verification instead
             return new AppResponse(true, "User registered successfully");
 
         } else
@@ -73,6 +78,9 @@ public class AuthController {
     @PostMapping("/login")
     public JwtTokenResponse login(@RequestBody @Valid LoginRequest request) throws CustomException {
 
+        if (!authUserService.isUserVerified(request.getEmail())){
+            throw new CustomException("Email not Verified");
+        }
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
@@ -81,6 +89,23 @@ public class AuthController {
             }
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return jwtService.generateToken(userDetails);
+    }
+
+    @PostMapping("/verify")
+    public JwtTokenResponse verifyAccount(@RequestBody @Valid OtpRequest request) throws CustomException {
+
+        if (authService.verifyOtp(request.email(), request.otp())) {
+
+            UserDetailsImpl user = authUserService.findUserByEmail(request.email());
+            return jwtService.generateToken(user);
+        }
+        throw new CustomException("Invalid OTP");
+    }
+
+    @PostMapping("/resend-otp")
+    public AppResponse resendOtp(@RequestBody @Valid ResendOtpRequest request) throws CustomException {
+        authService.resendOtp(request.email());
+        return new AppResponse(true, "Verification code sent");
     }
 
     @GetMapping("/test")

@@ -7,9 +7,11 @@ import com.introtech.introtechservice.common.AppResponse;
 import com.introtech.introtechservice.common.enums.UserRole;
 import com.introtech.introtechservice.dto.LoginVO;
 import com.introtech.introtechservice.dto.RegisterVO;
+import com.introtech.introtechservice.dto.VerifyOtpRequest;
 import com.introtech.introtechservice.entity.User;
 import com.introtech.introtechservice.exceptions.IntrotechException;
 import com.introtech.introtechservice.repository.UserRepository;
+import com.introtech.introtechutil.dto.ResendOtpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -91,5 +93,30 @@ public class AuthService {
                 .toEntity(Object.class);
 
         return authResponse;
+    }
+
+    public ResponseEntity<Object> verifyOtp(VerifyOtpRequest req) {
+
+        Map<String, Object> verifyPayload = new HashMap<>();
+        verifyPayload.put("email", req.email().toLowerCase());
+        verifyPayload.put("otp", req.otp());
+
+        return restClient.post()
+                .uri("/verify")
+                .body(verifyPayload)
+                .retrieve()
+                .toEntity(Object.class);
+    }
+
+    public ResponseEntity<Object> resendOtp(ResendOtpRequest req) {
+
+        Map<String, Object> resendPayload = new HashMap<>();
+        resendPayload.put("email", req.email().toLowerCase());
+
+        return restClient.post()
+                .uri("/resend-otp")
+                .body(resendPayload)
+                .retrieve()
+                .toEntity(Object.class);
     }
 }

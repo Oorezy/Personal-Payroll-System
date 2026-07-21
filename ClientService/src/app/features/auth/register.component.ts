@@ -8,7 +8,7 @@ import { AuthFrameComponent } from './auth-frame.component';
   selector: 'app-register',
   imports: [ReactiveFormsModule, RouterLink, AuthFrameComponent],
   template: `
-    <app-auth-frame eyebrow="Create your workspace" title="Start managing payroll with confidence" copy="Set up your employer account. You can add workers and payment details next.">
+    <app-auth-frame eyebrow="Create your workspace" title="Start managing payroll with confidence" copy="Set up your employer account. We will email you a one-time code to secure your workspace.">
       <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
         @if (error()) { <div class="form-error" role="alert">{{ error() }}</div> }
         <div class="form-grid compact">
@@ -63,7 +63,7 @@ export class RegisterComponent {
     this.submitting.set(true);
     const { confirmPassword: _, terms: __, ...request } = value;
     this.auth.register(request).subscribe({
-      next: () => void this.router.navigate(['/login'], { queryParams: { registered: 'true' } }),
+      next: () => void this.router.navigate(['/verify-email'], { queryParams: { email: request.email, registered: 'true' } }),
       error: (error: Error) => { this.error.set(error.message); this.submitting.set(false); }
     });
   }

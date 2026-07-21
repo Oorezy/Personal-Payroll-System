@@ -57,7 +57,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/register", "/login","/.well-known/jwks.json","/refresh-token").permitAll()
+                        req.requestMatchers("/register", "/login","/verify", "/resend-otp", "/.well-known/jwks.json","/refresh-token").permitAll()
                                 .anyRequest().authenticated())
                 .build();
     }

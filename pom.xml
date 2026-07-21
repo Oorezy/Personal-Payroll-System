@@ -22,6 +22,7 @@
         <module>AuthenticationService</module>
         <module>AuthenticationResource</module>
         <module>IntrotechService</module>
+        <module>IntrotechUtil</module>
     </modules>
 
     <url/>

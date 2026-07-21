@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { computed, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, map, Observable, switchMap, tap, throwError } from 'rxjs';
-import { ApiEnvelope, JwtTokenResponse, LoginRequest, RegisterRequest, UserProfile } from '../models/api.models';
+import { ApiEnvelope, JwtTokenResponse, LoginRequest, RegisterRequest, UserProfile, VerifyOtpRequest } from '../models/api.models';
 
 const ACCESS_TOKEN = 'introtech_access_token';
 const REFRESH_TOKEN = 'introtech_refresh_token';
@@ -31,6 +31,23 @@ export class AuthService {
     return this.http.post<ApiEnvelope<unknown>>('/server/payroll/register', request).pipe(
       map(response => {
         if (!response.status) throw new Error(response.message || 'Registration failed.');
+      }),
+      catchError(error => throwError(() => this.authError(error)))
+    );
+  }
+
+  verifyEmail(request: VerifyOtpRequest): Observable<UserProfile> {
+    return this.http.post<JwtTokenResponse>('/server/payroll/verify', request).pipe(
+      tap(tokens => this.storeTokens(tokens)),
+      switchMap(() => this.loadProfile()),
+      catchError(error => throwError(() => this.authError(error)))
+    );
+  }
+
+  resendVerificationEmail(email: string): Observable<void> {
+    return this.http.post<ApiEnvelope<unknown>>('/server/payroll/resend-otp', { email }).pipe(
+      map(response => {
+        if (!response.status) throw new Error(response.message || 'Could not send a new verification code.');
       }),
       catchError(error => throwError(() => this.authError(error)))
     );

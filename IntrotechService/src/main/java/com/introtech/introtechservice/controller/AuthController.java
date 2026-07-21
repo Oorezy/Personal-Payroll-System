@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.introtech.introtechservice.common.AppResponse;
 import com.introtech.introtechservice.dto.LoginVO;
 import com.introtech.introtechservice.dto.RegisterVO;
+import com.introtech.introtechservice.dto.VerifyOtpRequest;
 import com.introtech.introtechservice.exceptions.IntrotechException;
 import com.introtech.introtechservice.service.AuthService;
+import com.introtech.introtechutil.dto.ResendOtpRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,5 +63,39 @@ public class AuthController {
 
     }
 
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verify(@RequestBody @Valid VerifyOtpRequest req) throws IntrotechException, JsonProcessingException {
+
+        try {
+            return authService.verifyOtp(req);
+        } catch (HttpClientErrorException.Unauthorized e) {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(objectMapper.readValue(e.getResponseBodyAsString(), AppResponse.class));
+        } catch (HttpClientErrorException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(objectMapper.readValue(e.getResponseBodyAsString(), AppResponse.class));
+        } catch (Exception e) {
+            log.error("otp verification failed", e);
+            throw new IntrotechException("Failed to verify email with authentication service");
+        }
+
+    }
+
+    @PostMapping("/resend-otp")
+    public ResponseEntity<?> resendOtp(@RequestBody @Valid ResendOtpRequest req) throws IntrotechException, JsonProcessingException {
+
+        try {
+            return authService.resendOtp(req);
+        } catch (HttpClientErrorException.Unauthorized e) {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(objectMapper.readValue(e.getResponseBodyAsString(), AppResponse.class));
+        } catch (HttpClientErrorException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(objectMapper.readValue(e.getResponseBodyAsString(), AppResponse.class));
+        } catch (Exception e) {
+            log.error("otp resend failed", e);
+            throw new IntrotechException("Failed to resend verification code");
+        }
+
+    }
 
 }

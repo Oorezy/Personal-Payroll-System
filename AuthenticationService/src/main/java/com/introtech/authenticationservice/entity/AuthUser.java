@@ -61,6 +61,8 @@ public class AuthUser {
 
     private boolean enabled = true;
 
+    private boolean verified = false;
+
     @LastModifiedDate
     private Instant updated_at;
 

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment awaiting approval</title>
+</head>
+<body style="margin:0;background:#f6f8fc;font-family:Inter,Segoe UI,Arial,sans-serif;color:#14213d;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f6f8fc;padding:32px 16px;">
+    <tr>
+        <td align="center">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border-radius:24px;overflow:hidden;border:1px solid #e5e9f2;box-shadow:0 18px 50px rgba(20,33,61,.08);">
+                <tr>
+                    <td style="padding:28px 32px;background:#fff7ed;border-bottom:1px solid #fed7aa;">
+                        <p style="margin:0 0 10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#c2410c;font-weight:800;">Approval needed</p>
+                        <h1 style="margin:0;font-size:28px;line-height:1.2;color:#14213d;">A payroll payment is due</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:34px 32px;">
+                        <p style="margin:0 0 18px;font-size:16px;line-height:1.6;">Hi <span th:text="${name}">there</span>,</p>
+                        <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#46536a;">IntroTech has generated a payment record that needs your approval before funds can be sent.</p>
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:separate;border-spacing:0 10px;">
+                            <tr>
+                                <td style="padding:14px 16px;background:#f8fafc;border-radius:14px;color:#64748b;font-size:13px;font-weight:800;">Worker</td>
+                                <td style="padding:14px 16px;background:#f8fafc;border-radius:14px;text-align:right;font-size:14px;font-weight:800;" th:text="${workerName}">Amara Mensah</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:14px 16px;background:#f8fafc;border-radius:14px;color:#64748b;font-size:13px;font-weight:800;">Schedule</td>
+                                <td style="padding:14px 16px;background:#f8fafc;border-radius:14px;text-align:right;font-size:14px;font-weight:800;" th:text="${scheduleName}">Monthly payroll</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:14px 16px;background:#f8fafc;border-radius:14px;color:#64748b;font-size:13px;font-weight:800;">Amount</td>
+                                <td style="padding:14px 16px;background:#f8fafc;border-radius:14px;text-align:right;font-size:14px;font-weight:900;" th:text="${amount}">€1,200.00</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:14px 16px;background:#f8fafc;border-radius:14px;color:#64748b;font-size:13px;font-weight:800;">Due date</td>
+                                <td style="padding:14px 16px;background:#f8fafc;border-radius:14px;text-align:right;font-size:14px;font-weight:800;" th:text="${dueDate}">21 Jul 2026</td>
+                            </tr>
+                        </table>
+                        <p style="margin:24px 0 0;font-size:14px;line-height:1.6;color:#64748b;">Open IntroTech, go to Payments, and approve payment #<span th:text="${paymentId}">1001</span> when you are ready.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
