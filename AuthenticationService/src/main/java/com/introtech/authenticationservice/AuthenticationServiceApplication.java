@@ -3,7 +3,7 @@ package com.introtech.authenticationservice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.introtech")
 public class AuthenticationServiceApplication {
 
     public static void main(String[] args) {
