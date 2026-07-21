@@ -10,7 +10,7 @@ COPY AuthenticationService ./AuthenticationService
 COPY GatewayService ./GatewayService
 COPY DiscoveryService ./DiscoveryService
 COPY IntrotechService ./IntrotechService
-
+COPY IntrotechUtil ./IntrotechUtil
 
 RUN --mount=type=cache,target=/root/.m2 \
     mvn clean package -pl GatewayService -am -DskipTests
